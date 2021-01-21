@@ -1,5 +1,6 @@
 package com.github.gfqlm.encryption.configuration.properties;
 
+import com.github.gfqlm.encryption.algorithm.EncryptAlgorithm;
 import com.github.gfqlm.encryption.init.EncryptionUriInit;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -40,6 +41,9 @@ public class EncryptionProperties {
      * 比如：/user/list<br>
      */
     private List<String> requestDecryptionUri = new ArrayList<String>();
+
+
+    private EncryptAlgorithm encryptAlgorithm;
 
 
     public EncryptionProperties() {

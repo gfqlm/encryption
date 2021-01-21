@@ -12,7 +12,7 @@
 
     <groupId>com.github.gfqlm</groupId>
     <artifactId>spring-boot-starter-encryption</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
     <name>gfq-encryption</name>
     <description>针对请求响应数据的加密工具</description>
 

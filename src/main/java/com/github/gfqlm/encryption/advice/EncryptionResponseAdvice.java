@@ -3,7 +3,14 @@ package com.github.gfqlm.encryption.advice;
 
 import cn.hutool.core.codec.Base64;
 import cn.hutool.json.JSONUtil;
+import com.github.gfqlm.encryption.algorithm.EncryptAlgorithm;
+import com.github.gfqlm.encryption.configuration.properties.EncryptionProperties;
+import com.github.gfqlm.encryption.handler.ResultHandler;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -24,6 +31,15 @@ import java.net.URI;
 @ControllerAdvice
 public class EncryptionResponseAdvice implements ResponseBodyAdvice<Object> {
 
+    @Autowired
+    private EncryptionProperties encryptionProperties;
+
+    @Autowired
+    private EncryptAlgorithm encryptAlgorithm;
+
+    @Autowired
+    private ResultHandler resultHandler;
+
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
@@ -33,12 +49,20 @@ public class EncryptionResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+        if (encryptionProperties.isDebug()) {
+            // 如果是debug模式,则不进行加密操作
+            return body;
+        }
         URI uri = request.getURI();
         log.info("uri:{}", uri.getPath());
-        String bodyStr = JSONUtil.toJsonStr(body);
-
-        String dataStr = JSONUtil.toJsonStr(bodyStr);
-        String encodeBody = Base64.encode(dataStr);
-        return encodeBody;
+        String strBody = JSONUtil.toJsonStr(body);
+        try {
+            String encrypt = encryptAlgorithm.encrypt(strBody, encryptionProperties.getSecretKey());
+            Object object = resultHandler.getResult(encrypt);
+            return object;
+        } catch (Exception e) {
+            log.error("EncryptionResponseAdvice.beforeBodyWrite.encrypt.exception", e);
+        }
+        return body;
     }
 }
