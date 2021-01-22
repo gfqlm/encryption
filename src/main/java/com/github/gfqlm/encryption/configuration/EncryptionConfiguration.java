@@ -7,6 +7,7 @@ import com.github.gfqlm.encryption.algorithm.impl.AesEncryptAlgorithm;
 import com.github.gfqlm.encryption.configuration.properties.EncryptionProperties;
 import com.github.gfqlm.encryption.handler.ResultHandler;
 import com.github.gfqlm.encryption.handler.impl.DefaultResultHandler;
+import com.github.gfqlm.encryption.init.EncryptionUriInit;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -21,8 +22,6 @@ import org.springframework.stereotype.Component;
  * 加密自动装配类
  */
 @Configuration
-@Component
-@EnableAutoConfiguration
 @EnableConfigurationProperties(EncryptionProperties.class)
 public class EncryptionConfiguration {
 
@@ -37,6 +36,12 @@ public class EncryptionConfiguration {
     @ConditionalOnMissingBean(EncryptionResponseAdvice.class)
     public EncryptionResponseAdvice getEncryptionResponseAdvice() {
         return new EncryptionResponseAdvice();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(EncryptionUriInit.class)
+    public EncryptionUriInit getEncryptionUriInit() {
+        return new EncryptionUriInit();
     }
 
     @Bean

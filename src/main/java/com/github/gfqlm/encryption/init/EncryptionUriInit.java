@@ -9,13 +9,13 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -89,7 +89,6 @@ public class EncryptionUriInit implements ApplicationContextAware {
     }
 
 
-
     private String getUri(Class<?> clz, Method method) {
         String methodType = "";
         StringBuilder uri = new StringBuilder();
@@ -143,23 +142,12 @@ public class EncryptionUriInit implements ApplicationContextAware {
     }
 
 
-
-
     private String formatUri(String uri) {
         if (uri.startsWith("/")) {
             return uri;
         }
         return "/" + uri;
     }
-
-
-
-
-
-
-
-
-
 
 
 }

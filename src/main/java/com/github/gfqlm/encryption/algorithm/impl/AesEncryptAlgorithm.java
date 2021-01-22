@@ -1,5 +1,8 @@
 package com.github.gfqlm.encryption.algorithm.impl;
 
+import cn.hutool.core.codec.Base64;
+import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
+import cn.hutool.crypto.symmetric.SymmetricCrypto;
 import com.github.gfqlm.encryption.algorithm.EncryptAlgorithm;
 
 /**
@@ -10,14 +13,33 @@ import com.github.gfqlm.encryption.algorithm.EncryptAlgorithm;
  */
 public class AesEncryptAlgorithm implements EncryptAlgorithm {
 
+    /**
+     * 加密
+     * @param content    加密内容
+     * @param encryptKey 加密Key
+     * @return
+     * @throws Exception
+     */
     @Override
     public String encrypt(String content, String encryptKey) throws Exception {
-
-        return null;
+        byte[] decode = Base64.decode(encryptKey);
+        SymmetricCrypto aes = new SymmetricCrypto(SymmetricAlgorithm.AES, decode);
+        String decryptSecret = aes.encryptHex(content);
+        return decryptSecret;
     }
 
+    /**
+     * 解密
+     * @param encryptStr 解密字符串
+     * @param decryptKey 解密Key
+     * @return
+     * @throws Exception
+     */
     @Override
     public String decrypt(String encryptStr, String decryptKey) throws Exception {
-        return null;
+        byte[] decode = Base64.decode(decryptKey);
+        SymmetricCrypto aes = new SymmetricCrypto(SymmetricAlgorithm.AES, decode);
+        String decryptSecret = aes.decryptStr(encryptStr);
+        return decryptSecret;
     }
 }

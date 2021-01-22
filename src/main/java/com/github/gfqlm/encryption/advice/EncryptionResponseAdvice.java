@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import java.net.URI;
+import java.util.List;
 
 /**
  * @author GFQ
@@ -49,12 +52,19 @@ public class EncryptionResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        if (encryptionProperties.isDebug()) {
-            // 如果是debug模式,则不进行加密操作
+        List<String> responseEncryptionUriList = encryptionProperties.getResponseEncryptionUri();
+        log.info("配置的需要加密的uri集合:{}", JSONUtil.toJsonStr(responseEncryptionUriList));
+
+        URI uri = request.getURI();
+        String uriPath = uri.getPath();
+        log.info("uri:{}", uriPath);
+
+        HttpMethod method = request.getMethod();
+        String mPathUri = method.toString().toLowerCase() + ":" + uriPath;
+        if (encryptionProperties.isDebug() || !(responseEncryptionUriList.contains(mPathUri))) {
+            // 如果是debug模式,或者不在加密URI的配置内,则不加密
             return body;
         }
-        URI uri = request.getURI();
-        log.info("uri:{}", uri.getPath());
         String strBody = JSONUtil.toJsonStr(body);
         try {
             String encrypt = encryptAlgorithm.encrypt(strBody, encryptionProperties.getSecretKey());
