@@ -16,7 +16,7 @@ import java.util.stream.Stream;
  * @see <a href='https://github.com/gfqlm/encryption'>https://github.com/gfqlm/encryption</a>
  * 加密相关的配置信息
  */
-@ConfigurationProperties(prefix = "spring.encrypt")
+@ConfigurationProperties(prefix = "ggzj.encrypt")
 public class EncryptionProperties {
 
     /**
