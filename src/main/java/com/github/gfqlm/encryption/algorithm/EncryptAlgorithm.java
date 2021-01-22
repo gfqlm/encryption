@@ -16,7 +16,7 @@ public interface EncryptAlgorithm {
      * @return 加密内容
      * @throws Exception 加密失败
      */
-    String encrypt(String content, String encryptKey) throws Exception;
+    String encrypt(String content, String encryptKey);
 
     /**
      * 解密
@@ -26,5 +26,5 @@ public interface EncryptAlgorithm {
      * @return 解密内容
      * @throws Exception 解密失败
      */
-    String decrypt(String encryptStr, String decryptKey) throws Exception;
+    String decrypt(String encryptStr, String decryptKey);
 }
