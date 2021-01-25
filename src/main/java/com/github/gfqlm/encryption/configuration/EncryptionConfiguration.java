@@ -1,6 +1,6 @@
 package com.github.gfqlm.encryption.configuration;
 
-import com.github.gfqlm.encryption.advice.DecryptionRequestAdvice;
+import com.github.gfqlm.encryption.advice.DecryptionRequestBodyAdvice;
 import com.github.gfqlm.encryption.advice.EncryptionResponseAdvice;
 import com.github.gfqlm.encryption.algorithm.EncryptAlgorithm;
 import com.github.gfqlm.encryption.algorithm.impl.AesEncryptAlgorithm;
@@ -24,9 +24,9 @@ import org.springframework.context.annotation.Configuration;
 public class EncryptionConfiguration {
 
     @Bean
-    @ConditionalOnMissingBean(DecryptionRequestAdvice.class)
-    public DecryptionRequestAdvice getEncryptionRequestAdvice() {
-        return new DecryptionRequestAdvice();
+    @ConditionalOnMissingBean(DecryptionRequestBodyAdvice.class)
+    public DecryptionRequestBodyAdvice getEncryptionRequestAdvice() {
+        return new DecryptionRequestBodyAdvice();
     }
 
 

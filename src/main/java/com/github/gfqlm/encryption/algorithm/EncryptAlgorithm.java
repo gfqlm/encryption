@@ -27,4 +27,10 @@ public interface EncryptAlgorithm {
      * @throws Exception 解密失败
      */
     String decrypt(String encryptStr, String decryptKey);
+
+    /**
+     * 计算默认秘钥key值
+     * @return
+     */
+    String calculateEncryptKey();
 }

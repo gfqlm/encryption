@@ -23,8 +23,12 @@ public class AesEncryptAlgorithm implements EncryptAlgorithm {
      */
     @Override
     public String encrypt(String content, String encryptKey) {
+        // 如果没有配置或者是秘钥为空，则采用一定的方式进行计算出一个秘钥
+        if (StrUtil.isBlank(encryptKey)) {
+            encryptKey = calculateEncryptKey();
+        }
         if (StrUtil.length(encryptKey) != 16) {
-            throw new ValidSecurityKeyException("默认AES加密算法秘钥长度不合法","invalid_aes_key");
+            throw new ValidSecurityKeyException("默认AES加密算法秘钥长度不合法", "invalid_aes_key");
         }
         byte[] decode = encryptKey.getBytes();
         SymmetricCrypto aes = new SymmetricCrypto(SymmetricAlgorithm.AES, decode);
@@ -41,12 +45,30 @@ public class AesEncryptAlgorithm implements EncryptAlgorithm {
      */
     @Override
     public String decrypt(String encryptStr, String decryptKey) {
+        if (StrUtil.isBlank(decryptKey)) {
+            decryptKey = calculateEncryptKey();
+        }
         if (StrUtil.length(decryptKey) != 16) {
-            throw new ValidSecurityKeyException("默认AES解密算法秘钥长度不合法","invalid_aes_key");
+            throw new ValidSecurityKeyException("默认AES解密算法秘钥长度不合法", "invalid_aes_key");
         }
         byte[] decode = decryptKey.getBytes();
         SymmetricCrypto aes = new SymmetricCrypto(SymmetricAlgorithm.AES, decode);
         String decryptSecret = aes.decryptStr(encryptStr);
         return decryptSecret;
     }
+
+
+    /**
+     * 在秘钥为空时计算一个
+     *
+     * @return
+     */
+    public String calculateEncryptKey() {
+        long currentTime = System.currentTimeMillis();
+        // 将当前是时间戳除以10000再拼接固定的字符串
+        long l = currentTime / 10000;
+        return l + "ptggzja";
+    }
+
+
 }

@@ -26,7 +26,7 @@ import java.lang.reflect.Type;
  */
 @Slf4j
 @ControllerAdvice
-public class DecryptionRequestAdvice implements RequestBodyAdvice {
+public class DecryptionRequestBodyAdvice implements RequestBodyAdvice {
 
     @Autowired
     private EncryptionProperties encryptionProperties;
